@@ -1,0 +1,124 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.3
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1:3306
+-- Generation Time: Nov 20, 2026 at 10:44 AM
+-- Server version: 13.0.2-MariaDB
+-- PHP Version: 8.5.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `spp_pesantren`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log_pembayaran`
+--
+
+CREATE TABLE `log_pembayaran` (
+  `id_pembayaran` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `nama_santri` varchar(100) NOT NULL,
+  `periode` varchar(30) NOT NULL,
+  `jumlah_bayar` decimal(20,5) NOT NULL,
+  `tanggal_bayar` date NOT NULL,
+  `metode_pembayaran` enum('tunai','transfer') NOT NULL,
+  `bukti_transfer` varchar(255) NOT NULL,
+  `status` enum('menunggu','lunas','ditolak') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rincian_pembayaran`
+--
+
+CREATE TABLE `rincian_pembayaran` (
+  `id_rincian` int(11) NOT NULL,
+  `id_pembayaran` int(11) NOT NULL,
+  `jenis_biaya` varchar(100) NOT NULL,
+  `jumlah_bulan` int(12) NOT NULL,
+  `nominal_satuan` decimal(20,5) NOT NULL,
+  `subtotal` decimal(20,0) NOT NULL,
+  `catatan` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `nama_lengkap` varchar(100) NOT NULL,
+  `role` enum('admin','santri/walisantri') NOT NULL,
+  `no_hp` varchar(20) NOT NULL,
+  `alamat` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `log_pembayaran`
+--
+ALTER TABLE `log_pembayaran`
+  ADD PRIMARY KEY (`id_pembayaran`),
+  ADD UNIQUE KEY `id_user` (`id_user`);
+
+--
+-- Indexes for table `rincian_pembayaran`
+--
+ALTER TABLE `rincian_pembayaran`
+  ADD PRIMARY KEY (`id_rincian`),
+  ADD UNIQUE KEY `id_pembayaran` (`id_pembayaran`);
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `log_pembayaran`
+--
+ALTER TABLE `log_pembayaran`
+  MODIFY `id_pembayaran` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `rincian_pembayaran`
+--
+ALTER TABLE `rincian_pembayaran`
+  MODIFY `id_rincian` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
